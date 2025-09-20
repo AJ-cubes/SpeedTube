@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SpeedTube Hotkey Settings</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="icon" type="image/png" href="../images/icon.png">
+</head>
+<body>
+    <div class="header" style="position:relative;">
+        <a href="index.html" style="display:inline-block;" tabindex="0" id="logo" class="has-tooltip">
+            <img src="../images/icon.png" alt="SpeedTube Logo" class="logo">
+            <span class="custom-tooltip">Go to your hotkey settings</span>
+        </a>
+        <h1>SpeedTube Hotkey Settings</h1>
+        <span class="version" id="versionSpan"></span>
+        <div style="position:absolute;top:50%;right:32px;transform:translateY(-50%);display:flex;gap:12px;z-index:10;">
+            <button id="exportBtn" class="has-tooltip icon-btn" style="width:44px;height:44px;border-radius:50%;background:#e53935;display:flex;align-items:center;justify-content:center;padding:0;">
+                <svg width="26" height="26" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="10" fill="#fff"/>
+                    <text x="10" y="15" text-anchor="middle" font-size="13" fill="#e53935" font-family="Arial" font-weight="bold">📦</text>
+                </svg>
+                <span class="custom-tooltip left">Export your hotkey settings to a file</span>
+            </button>
+            <button id="importBtn" class="has-tooltip icon-btn" style="width:44px;height:44px;border-radius:50%;background:#e53935;display:flex;align-items:center;justify-content:center;padding:0;">
+                <svg width="26" height="26" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="10" fill="#fff"/>
+                    <text x="10" y="15" text-anchor="middle" font-size="13" fill="#e53935" font-family="Arial" font-weight="bold">📩</text>
+                </svg>
+                <span class="custom-tooltip left">Import hotkey settings from a file</span>
+            </button>
+            <button id="shareBtn" class="has-tooltip icon-btn" style="width:44px;height:44px;border-radius:50%;background:#e53935;display:flex;align-items:center;justify-content:center;padding:0;">
+                <svg width="26" height="26" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="10" fill="#fff"/>
+                    <text x="10" y="15" text-anchor="middle" font-size="13" fill="#e53935" font-family="Arial" font-weight="bold">🔗</text>
+                </svg>
+                <span class="custom-tooltip left">Generate a link to share your hotkey settings</span>
+            </button>
+            <a href="instructions.html?version=" id="infoBtn"
+               class="has-tooltip icon-btn"
+               style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#e53935;border-radius:50%;text-decoration:none;">
+                <svg width="26" height="26" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="10" fill="#fff"/>
+                    <text x="10" y="15" text-anchor="middle" font-size="13" fill="#e53935" font-family="Arial" font-weight="bold">i</text>
+                </svg>
+                <span class="custom-tooltip left">View instructions and help</span>
+            </a>
+            <button id="themeBtn" class="has-tooltip icon-btn" style="width:44px;height:44px;border-radius:50%;background:#e53935;display:flex;align-items:center;justify-content:center;padding:0;">
+                <svg width="26" height="26" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="10" fill="#fff"/>
+                    <text x="10" y="15" text-anchor="middle" font-size="13" fill="#e53935" font-family="Arial" font-weight="bold">🌙</text>
+                </svg>
+                <span class="custom-tooltip left">Switch to dark mode</span>
+            </button>
+            <input type="file" id="importFileInput" accept=".sths" style="display:none;">
+        </div>
+    </div>
+    <form id="hotkeyForm">
+        <div id="hotkeyList"></div>
+        <small>
+            Click the hotkey field and press your desired hotkey combination.<div style="height: 0.5em;"></div>
+            Windows key (Meta) is supported.<div style="height: 0.5em;"></div>
+            Max speed is 16x. Min speed is 0.0625x.<div style="height: 0.5em;"></div>
+            Keep your keyboard language the same when setting and using the hotkey.<div style="height: 0.5em;"></div>
+            Max decimal places for speed is 4.<div style="height: 0.5em;"></div>
+        </small>
+        <button type="button" id="addHotkeyBtn" class="has-tooltip">
+            Add Hotkey
+            <span class="custom-tooltip">Add a new hotkey entry</span>
+        </button>
+    </form>
+    <div id="outputMsg"></div>
+    <script src="../javascript/index.js"></script>
+</body>
+</html>
