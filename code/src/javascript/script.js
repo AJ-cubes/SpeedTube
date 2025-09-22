@@ -461,7 +461,7 @@ function initializeExtensionButton() {
                         tooltipChild.parentElement.ariaHidden = "false";
                         tooltipChild.ariaHidden = "false";
                     }
-                }, 10);
+                }, 100);
             });
 
             document.querySelector('.ytp-button.ytp-autonav-toggle')?.addEventListener("click", () => {
@@ -552,7 +552,7 @@ function updateTimeDisplay(rateBasedTimeDisplay, display = true) {
         if (!timeDisplayInterval) {
             timeDisplayInterval = setInterval(() => {
                 updateTimes(video.currentTime / video.playbackRate, video.duration / video.playbackRate);
-            }, 10);
+            }, 1);
         }
     } else {
         updateTimes(video.currentTime, video.duration);
@@ -708,9 +708,15 @@ function ctrlKey(e) {
 }
 
 function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+
+    if (hrs > 0) {
+        return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    } else {
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
 }
 
 function initialize() {
