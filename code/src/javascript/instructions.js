@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (container && container.parentNode) {
             container.parentNode.insertBefore(msgDiv, container);
         }
+        history.replaceState(null, '', `${location.origin}${location.pathname}`);
     }
 
     const okBtn = document.getElementById('okBtn');

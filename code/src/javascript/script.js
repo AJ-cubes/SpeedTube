@@ -84,13 +84,13 @@ document.addEventListener('keydown', (e) => {
             video.pause();
         }
         else if (e.code === "KeyS" && !ctrlKey(e) && e.altKey && !textMode(document.activeElement)) {
-            chrome.storage.sync.get('rateBasedTimeDisplay', (result) => {
+            chrome.storage.sync.get('smartTime', (result) => {
                 const timeDisplay = document.getElementById('rate-based-time-display-check');
                 if (!timeDisplay) return;
 
-                updateTimeDisplay(!result.rateBasedTimeDisplay);
-                timeDisplay.ariaChecked = !result.rateBasedTimeDisplay;
-                chrome.storage.sync.set({ rateBasedTimeDisplay: !result.rateBasedTimeDisplay });
+                updateTimeDisplay(!result.smartTime);
+                timeDisplay.ariaChecked = !result.smartTime;
+                chrome.storage.sync.set({ smartTime: !result.smartTime });
             });
         } else if (isShorts) {
             if (['Digit0', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'].includes(e.code)) {
@@ -506,14 +506,14 @@ function initializeExtensionButton() {
                     </svg>
                 `;
 
-                chrome.storage.sync.get('rateBasedTimeDisplay', (result) => {
-                    if (typeof result.rateBasedTimeDisplay === 'boolean') {
-                        timeDisplay.ariaChecked = result.rateBasedTimeDisplay;
-                        chrome.storage.sync.set({ rateBasedTimeDisplay: result.rateBasedTimeDisplay });
-                        updateTimeDisplay(result.rateBasedTimeDisplay, false);
+                chrome.storage.sync.get('smartTime', (result) => {
+                    if (typeof result.smartTime === 'boolean') {
+                        timeDisplay.ariaChecked = result.smartTime;
+                        chrome.storage.sync.set({ smartTime: result.smartTime });
+                        updateTimeDisplay(result.smartTime, false);
                     } else {
                         timeDisplay.ariaChecked = false;
-                        chrome.storage.sync.set({ rateBasedTimeDisplay: false });
+                        chrome.storage.sync.set({ smartTime: false });
                         updateTimeDisplay(false, false);
                     }
                 });
@@ -521,10 +521,10 @@ function initializeExtensionButton() {
                 menuVolume?.before(timeDisplay);
 
                 timeDisplay.addEventListener('click', () => {
-                    chrome.storage.sync.get('rateBasedTimeDisplay', (result) => {
-                        updateTimeDisplay(!result.rateBasedTimeDisplay);
-                        timeDisplay.ariaChecked = !result.rateBasedTimeDisplay;
-                        chrome.storage.sync.set({ rateBasedTimeDisplay: !result.rateBasedTimeDisplay });
+                    chrome.storage.sync.get('smartTime', (result) => {
+                        updateTimeDisplay(!result.smartTime);
+                        timeDisplay.ariaChecked = !result.smartTime;
+                        chrome.storage.sync.set({ smartTime: !result.smartTime });
                     });
                 });
             }
@@ -542,11 +542,11 @@ function updateTimes(currentTime, duration) {
     }
 }
 
-function updateTimeDisplay(rateBasedTimeDisplay, display = true) {
+function updateTimeDisplay(smartTime, display = true) {
     const video = Array.from(document.getElementsByTagName('video')).find(v => !isNaN(v.duration) && v.duration > 0);
     if (!video) return;
 
-    if (rateBasedTimeDisplay === true) {
+    if (smartTime === true) {
         updateTimes(video.currentTime / video.playbackRate, video.duration / video.playbackRate);
         if (display) displayMessage(video?.playbackRate, video?.playbackRate, "Smart⏱");
         if (!timeDisplayInterval) {
@@ -708,15 +708,16 @@ function ctrlKey(e) {
 }
 
 function formatTime(seconds) {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
+    const total = Math.max(0, Math.floor(seconds));
+    const hrs = Math.floor(total / 3600);
+    const mins = Math.floor((total % 3600) / 60);
+    const secs = total % 60;
 
-    if (hrs > 0) {
-        return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    } else {
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
+    const pad = (n) => n.toString().padStart(2, '0');
+
+    return hrs > 0
+        ? `${hrs}:${pad(mins)}:${pad(secs)}`
+        : `${mins}:${pad(secs)}`;
 }
 
 function initialize() {
@@ -725,6 +726,13 @@ function initialize() {
     initializeExtensionButton();
     displaySpeedLabel();
     autoPlayShorts();
+
+    const video = Array.from(document.getElementsByTagName('video')).find(v => !isNaN(v.duration) && v.duration > 0);
+    if (video && typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+        chrome.storage.sync.get('smartTime', (result) => {
+            updateTimeDisplay(!!result.smartTime, false);
+        });
+    }
 }
 
 initialize();
