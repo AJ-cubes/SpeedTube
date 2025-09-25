@@ -85,7 +85,7 @@ document.addEventListener('keydown', (e) => {
         }
         else if (e.code === "KeyS" && !ctrlKey(e) && e.altKey && !textMode(document.activeElement)) {
             chrome.storage.sync.get('smartTime', (result) => {
-                const timeDisplay = document.getElementById('rate-based-time-display-check');
+                const timeDisplay = document.getElementById('smart-time-check');
                 if (!timeDisplay) return;
 
                 updateTimeDisplay(!result.smartTime);
@@ -479,7 +479,7 @@ function initializeExtensionButton() {
                 clearInterval(intervalId);
             });
         }
-        if (!document.getElementById("rate-based-time-display-check")) {
+        if (!document.getElementById("smart-time-check")) {
             let menuVolume = document.querySelector('div.ytp-menuitem.ytp-drc-menu-item');
             if (!menuVolume) {
                 const settingsButton = document.querySelector('button.ytp-button.ytp-settings-button');
@@ -493,9 +493,9 @@ function initializeExtensionButton() {
             if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
                 const timeDisplay = menuVolume?.cloneNode(true);
 
-                timeDisplay.id = "rate-based-time-display-check";
-                timeDisplay.title = `Playback Rate Based Time Display (${alt} + S)`;
-                timeDisplay.ariaLabel = `Playback Rate Based Time Display (${alt} + S)`;
+                timeDisplay.id = "smart-time-check";
+                timeDisplay.title = `Smart Time Display (${alt} + S)`;
+                timeDisplay.ariaLabel = `Smart Time Display (${alt} + S)`;
                 timeDisplay.ariaDisabled = false;
                 timeDisplay.querySelector('div.ytp-menuitem-label').textContent = "Smart Time";
                 timeDisplay.querySelector('div.ytp-menuitem-icon').innerHTML = `
@@ -633,7 +633,6 @@ function toggleAutoPlay(isShorts = true, clicked = false) {
         if (!clicked) {
             document.querySelector('.ytp-button.ytp-autonav-toggle')?.click();
         }
-        displayMessage(video?.playbackRate, video?.playbackRate, `Auto ${document.querySelector('.ytp-autonav-toggle')?.querySelector('.ytp-autonav-toggle-button-container')?.querySelector('.ytp-autonav-toggle-button')?.ariaChecked === "true" ? '▶' : '⏸'}`);
     }
 }
 
